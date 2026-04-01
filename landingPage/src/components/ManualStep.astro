@@ -1,0 +1,325 @@
+---
+export interface Pointer {
+	x: number;
+	y: number;
+	label?: string;
+	imageIndex?: number;
+}
+
+interface Props {
+	id: string;
+	stepNumber: number;
+	title: string;
+	description: string;
+	items: string[];
+	multipleImages: string[];
+	imageAlt: string;
+	pointers?: Pointer[];
+	reversed?: boolean;
+}
+
+const {
+	id,
+	stepNumber,
+	title,
+	description,
+	items,
+	multipleImages = [],
+	imageAlt,
+	pointers = [],
+	reversed = false
+} = Astro.props;
+---
+
+<section id={id} class:list={["manual-step reveal", { reversed }]}>
+	<div class="step-grid">
+		<!-- Left: Detail Card -->
+		<div class="content-block glass-card">
+			<div class="step-header">
+				<div class="step-badge">Paso {stepNumber}</div>
+				<h2 class="step-title">{title}</h2>
+			</div>
+			<p class="step-desc">{description}</p>
+			<ul class="step-list">
+				{items.map((item) => (
+					<li>
+						<div class="item-check"><i class="fas fa-check"></i></div>
+						<div class="item-text">{item}</div>
+					</li>
+				))}
+			</ul>
+		</div>
+
+		<!-- Right: Screenshot Area -->
+		<div class="visual-block">
+			<div class="image-stage-scrolling">
+				<div class="main-image-wrapper">
+					<img 
+						src={multipleImages[0]} 
+						alt={imageAlt} 
+						id={`display-${id}`}
+						class="main-screenshot"
+					/>
+					<div class="pointers-overlay" id={`pointers-${id}`}>
+						{pointers.filter(p => p.imageIndex === 0).map((p) => (
+							<div class="hotspot" style={`left: ${p.x}%; top: ${p.y}%;`}>
+								<div class="hotspot-pulse"></div>
+								<div class="hotspot-dot"></div>
+								{p.label && <div class="hotspot-tooltip glass-card">{p.label}</div>}
+							</div>
+						))}
+					</div>
+				</div>
+
+				{multipleImages.length > 1 && (
+					<div class="gallery-thumbs">
+						{multipleImages.map((img, index) => (
+							<button 
+								class:list={["thumb-item", { active: index === 0 }]}
+								data-src={img}
+								data-index={index}
+							>
+								<img src={img} alt="" />
+							</button>
+						))}
+					</div>
+				)}
+			</div>
+		</div>
+	</div>
+</section>
+
+<style>
+	.manual-step {
+		padding: 4rem 0;
+	}
+
+	.step-grid {
+		display: grid;
+		grid-template-columns: 1fr 1.5fr;
+		gap: 6rem;
+		align-items: flex-start;
+	}
+
+	.reversed .step-grid {
+		grid-template-columns: 1.5fr 1fr;
+	}
+	.reversed .content-block { order: 2; }
+	.reversed .visual-block { order: 1; }
+
+	/* Text Card */
+	.content-block {
+		padding: 4rem;
+		border-radius: 36px;
+		background: rgba(255, 255, 255, 0.02);
+		border: 1px solid rgba(255, 255, 255, 0.05);
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.step-badge {
+		font-size: 0.75rem;
+		font-weight: 800;
+		color: var(--ssoma-red);
+		text-transform: uppercase;
+		letter-spacing: 3px;
+		margin-bottom: 0.75rem;
+	}
+
+	.step-title {
+		font-size: 3.5rem;
+		line-height: 1;
+		font-weight: 800;
+	}
+
+	.step-desc {
+		font-size: 1.25rem;
+		color: var(--text-dim);
+		line-height: 1.6;
+	}
+
+	.step-list {
+		list-style: none;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.step-list li {
+		display: flex;
+		gap: 1.5rem;
+		align-items: flex-start;
+	}
+
+	.item-check {
+		width: 28px;
+		height: 28px;
+		background: rgba(200, 16, 46, 0.1);
+		border: 1px solid rgba(200, 16, 46, 0.3);
+		border-radius: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--ssoma-red);
+		font-size: 0.8rem;
+		flex-shrink: 0;
+		margin-top: 0.2rem;
+	}
+
+	.item-text {
+		font-size: 1.1rem;
+		color: rgba(255,255,255,0.8);
+		line-height: 1.6;
+	}
+
+	/* Visual Block */
+	.visual-block {
+		position: sticky;
+		top: 15vh;
+	}
+
+	.image-stage-scrolling {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.main-image-wrapper {
+		position: relative;
+		border-radius: 24px;
+		overflow: hidden;
+		border: 1px solid rgba(255,255,255,0.08);
+		background: #0a0a0a;
+		box-shadow: 0 40px 80px rgba(0,0,0,0.4);
+	}
+
+	.main-screenshot {
+		width: 100%;
+		height: auto;
+		display: block;
+		transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	/* Hotspots */
+	.pointers-overlay {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+
+	.hotspot {
+		position: absolute;
+		width: 30px;
+		height: 30px;
+		transform: translate(-50%, -50%);
+		pointer-events: auto;
+		cursor: pointer;
+		z-index: 20;
+	}
+
+	.hotspot-dot {
+		position: absolute;
+		inset: 0;
+		background: var(--ssoma-red);
+		border-radius: 50%;
+		border: 2px solid #fff;
+		box-shadow: 0 0 15px var(--ssoma-red);
+	}
+
+	.hotspot-pulse {
+		position: absolute;
+		inset: -12px;
+		background: var(--ssoma-red);
+		border-radius: 50%;
+		opacity: 0.4;
+		animation: pulse-ring 2s infinite ease-out;
+	}
+
+	@keyframes pulse-ring {
+		0% { transform: scale(0.5); opacity: 0.6; }
+		100% { transform: scale(1.8); opacity: 0; }
+	}
+
+	.hotspot-tooltip {
+		position: absolute;
+		bottom: 130%;
+		left: 50%;
+		transform: translateX(-50%) translateY(10px);
+		padding: 0.75rem 1.5rem;
+		font-size: 0.85rem;
+		font-weight: 700;
+		white-space: nowrap;
+		background: rgba(10,10,10,0.9);
+		border: 1px solid rgba(255,255,255,0.1);
+		border-radius: 10px;
+		color: #fff;
+		opacity: 0;
+		visibility: hidden;
+		transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+		backdrop-filter: blur(10px);
+	}
+
+	.hotspot:hover .hotspot-tooltip {
+		opacity: 1;
+		visibility: visible;
+		transform: translateX(-50%) translateY(0);
+	}
+
+	/* Gallery */
+	.gallery-thumbs {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+	}
+
+	.thumb-item {
+		width: 80px;
+		height: 50px;
+		border-radius: 8px;
+		overflow: hidden;
+		border: 2px solid transparent;
+		background: #222;
+		cursor: pointer;
+		opacity: 0.4;
+		transition: all 0.3s;
+	}
+
+	.thumb-item img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	.thumb-item:hover, .thumb-item.active {
+		opacity: 1;
+		border-color: var(--ssoma-red);
+		transform: translateY(-4px);
+		box-shadow: 0 10px 20px rgba(200, 16, 46, 0.2);
+	}
+
+	/* Responsive */
+	@media (max-width: 1200px) {
+		.step-grid { gap: 3rem; }
+		.step-title { font-size: 2.5rem; }
+	}
+
+	@media (max-width: 968px) {
+		.step-grid { grid-template-columns: 1fr; gap: 4rem; }
+		.visual-block { position: static; }
+		.content-block { padding: 2.5rem; }
+	}
+</style>
+
+<script is:inline>
+	document.querySelectorAll('.thumb-item').forEach(btn => {
+		btn.onclick = () => {
+			const container = btn.closest('.image-stage-scrolling');
+			const display = container.querySelector('.main-screenshot');
+			display.src = btn.dataset.src;
+			
+			container.querySelectorAll('.thumb-item').forEach(b => b.classList.remove('active'));
+			btn.classList.add('active');
+		};
+	});
+</script>

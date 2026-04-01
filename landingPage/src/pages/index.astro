@@ -1,0 +1,541 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CanvaPresentation from "../components/CanvaPresentation.astro";
+
+const ssomaManual = {
+	id: "ssoma",
+	label: "SSOMA",
+	primaryColor: "#c8102e",
+	glowColor: "#c8102e",
+	bgDark: "#330000",
+	icon: "fas fa-shield-halved",
+	steps: [
+		{
+			id: "paso1",
+			stepNumber: 1,
+			title: "Acceso y Navegación",
+			description:
+				"El primer paso para gestionar la seguridad es ingresar correctamente al sistema.",
+			items: [
+				"Ingresamos con nuestro usuario y contraseña designada.",
+				"En la pestaña 'Registros' para realizar un nuevo formulario de SSOMA.",
+				"En la pestaña 'Listado' podremos observar el historial de nuestros registros.",
+				"En la pestaña 'Gestión' podremos administrar el ingreso de nuevos trabajadores y usuarios.",
+			],
+			multipleImages: [
+				"/images/manuals/SSOMA/login.jpg",
+				"/images/manuals/SSOMA/registro.jpg",
+				"/images/manuals/SSOMA/gestion.jpg",
+			],
+			imageAlt: "Interfaz de acceso y navegación",
+		},
+		{
+			id: "paso2",
+			stepNumber: 2,
+			title: "Gestión de Trabajadores",
+			description:
+				"Administra el personal que participa en las operaciones de campo.",
+			items: [
+				"Formulario de nuevo trabajador: Llenamos el formulario con datos del trabajador.",
+				"La contraseña por defecto para nuevos ingresos será '123456'.",
+				"Seleccionamos el cargo específico.",
+				"Hacemos clic en 'Crear' para registrar al nuevo trabajador.",
+				"Opción 'crear usuario para este trabajador' disponible.",
+			],
+			multipleImages: [
+				"/images/manuals/SSOMA/newtrabajador.jpg",
+				"/images/manuals/SSOMA/regtrabajador.jpg",
+			],
+			imageAlt: "Formulario de trabajadores",
+			reversed: true,
+		},
+		{
+			id: "paso3",
+			stepNumber: 3,
+			title: "Gestión de Usuarios",
+			description:
+				"Habilita el acceso al sistema para que el personal pueda registrar sus formularios.",
+			items: [
+				"Formulario de nuevo 'Usuario': Aquí vinculamos a los trabajadores registrados.",
+				"El administrador puede habilitar o deshabilitar accesos según sea necesario.",
+				"Fundamental para que el personal pueda llenar los papeles individualmente.",
+			],
+			multipleImages: ["/images/manuals/SSOMA/newusuario.jpg"],
+			imageAlt: "Gestión de usuarios",
+		},
+		{
+			id: "paso4",
+			stepNumber: 4,
+			title: "Llenado de Formulario SSOMA",
+			description:
+				"Inicia un nuevo registro de Análisis de Trabajo Seguro.",
+			items: [
+				"Ingresamos con nuestro usuario habilitado y vamos a 'Registros'.",
+				"Seleccionamos el módulo 'ANÁLISIS DE TRABAJO SEGURO'.",
+				"El sistema desplegará los 5 documentos obligatorios.",
+				"El llenado de formulario es en orden secuencial.",
+			],
+			multipleImages: [
+				"/images/manuals/SSOMA/newregistro.jpg",
+				"/images/manuals/SSOMA/formulario.jpg",
+				"/images/manuals/SSOMA/newformulario.jpg",
+			],
+			imageAlt: "Llenado de formulario",
+			reversed: true,
+		},
+		{
+			id: "paso5",
+			stepNumber: 5,
+			title: "Registros y Selección de ATS",
+			description:
+				"Completa la información técnica siguiendo el flujo paso a paso.",
+			items: [
+				"Responsable y Supervisor: Selecciona al personal correspondiente.",
+				"Checklist SST: Selecciona EPPs y añade observaciones.",
+			],
+			multipleImages: [
+				"/images/manuals/SSOMA/ats.jpg",
+				"/images/manuals/SSOMA/ats1.jpg",
+			],
+			imageAlt: "Detalles ATS",
+		},
+		{
+			id: "paso6",
+			stepNumber: 6,
+			title: "Secuencia de Tareas y Participantes",
+			description:
+				"Define el orden de las actividades y vincula al personal responsable.",
+			items: [
+				"Elegiremos en la tarea respecto al trabajo que hemos designado.",
+				"Las fotos y firmas son obligatorias para validar la participación.",
+				"Se pueden adicionar más ATS para actividades múltiples.",
+				"Terminado el llenado presionamos 'SIGUIENTE'.",
+			],
+			multipleImages: ["/images/manuals/SSOMA/participantes.jpg"],
+			imageAlt: "Tareas y participantes",
+			reversed: true,
+		},
+		{
+			id: "paso7",
+			stepNumber: 7,
+			title: "PETAR - Verificación General",
+			description:
+				"Realiza la validación crítica inicial para trabajos de alto riesgo.",
+			items: [
+				"Elegimos la opción correcta para realizar nuestro trabajo designado en el ATS.",
+				"Si elegimos más ATS nos cargará más PETAR para llenar.",
+			],
+			multipleImages: [
+				"/images/manuals/SSOMA/permiso.jpg",
+				"/images/manuals/SSOMA/permiso2.jpg",
+			],
+			imageAlt: "Verificación PETAR",
+		},
+		{
+			id: "paso8",
+			stepNumber: 8,
+			title: "Tipo de Trabajo Peligroso",
+			description:
+				"Especifica los riesgos asociados a la labor particular.",
+			items: [
+				"Seleccionamos el tipo de trabajo (ej: Trabajo en Altura).",
+				"El sistema desplegará condiciones específicas.",
+				"Puedes elegir múltiples tipos de trabajos peligrosos.",
+			],
+			multipleImages: [
+				"/images/manuals/SSOMA/trabajo.jpg",
+				"/images/manuals/SSOMA/rescate.jpg",
+			],
+			imageAlt: "Trabajos de riesgo",
+			reversed: true,
+		},
+		{
+			id: "paso9",
+			stepNumber: 9,
+			title: "Equipos de Protección (EPP)",
+			description:
+				"Selecciona el equipo de seguridad obligatorio para la tarea.",
+			items: [
+				"Marcamos todos los EPPs que el personal utilizará.",
+				"Culminado seleccionamos 'SIGUIENTE' para el próximo documento.",
+			],
+			multipleImages: [
+				"/images/manuals/SSOMA/equipos1.jpg",
+				"/images/manuals/SSOMA/equipos.jpg",
+			],
+			imageAlt: "EPP General",
+		},
+		{
+			id: "paso10",
+			stepNumber: 10,
+			title: "Inducción y Capacitación",
+			description:
+				"Validación de competencias y conocimiento del equipo.",
+			items: [
+				"Elegimos el tema de la capacitación.",
+				"Grabamos un video de 15 segundos detallando el tema.",
+				"Seleccionamos 'Siguiente' para continuar.",
+			],
+			multipleImages: [
+				"/images/manuals/SSOMA/induccion.jpg",
+				"/images/manuals/SSOMA/induccion2.jpg",
+			],
+			imageAlt: "Inducción",
+			reversed: true,
+		},
+		{
+			id: "paso11",
+			stepNumber: 11,
+			title: "Inspección de EPPs",
+			description: "Documentación fotográfica y verificación del equipo.",
+			items: [
+				"Seleccionamos EPPs comunes para la foto grupal.",
+				"Evidencia fotográfica individual obligatoria.",
+				"Seleccionamos 'Siguiente' para continuar.",
+			],
+			multipleImages: [
+				"/images/manuals/SSOMA/inspeccionepp.jpg",
+				"/images/manuals/SSOMA/inspeccionepp2.jpg",
+			],
+			imageAlt: "Inspección de EPP",
+		},
+		{
+			id: "paso12",
+			stepNumber: 12,
+			title: "Inspección de Herramientas",
+			description: "Registro detallado del estado de las herramientas.",
+			items: [
+				"Seleccionamos herramientas y tomamos foto.",
+				"Detallamos el estado técnico con las opciones.",
+				"Seleccionamos 'Finalizar y guardar SSOMA'.",
+			],
+			multipleImages: [
+				"/images/manuals/SSOMA/inspeccionherramientas.jpg",
+				"/images/manuals/SSOMA/inspeccionherramientas2.jpg",
+			],
+			imageAlt: "Inspección de herramientas",
+			reversed: true,
+		},
+		{
+			id: "paso13",
+			stepNumber: 13,
+			title: "Finalización y Listado",
+			description:
+				"Seguimiento y aprobación de los formularios enviados.",
+			items: [
+				"Al finalizar, recibiremos un mensaje de confirmación.",
+				"En la pestaña 'Listado' podemos ver el historial.",
+				"Revisa los detalles utilizando el ícono de visualización.",
+			],
+			multipleImages: [
+				"/images/manuals/SSOMA/guardar.jpg",
+				"/images/manuals/SSOMA/confirmacion.jpg",
+				"/images/manuals/SSOMA/listado.jpg",
+			],
+			imageAlt: "Listado final",
+		},
+	],
+};
+
+const reservaManual = {
+	id: "reserva",
+	label: "Reserva de Sala",
+	primaryColor: "#3b82f6",
+	glowColor: "#3b82f6",
+	bgDark: "#0a0a2e",
+	icon: "fas fa-calendar-check",
+	steps: [
+		{
+			id: "reserva0",
+			stepNumber: 0,
+			title: "Gestión de Salas de Reunión",
+			description: "Agenda y gestiona tus reuniones de forma eficiente.",
+			items: [
+				"Muestra la interfaz unificada de reservación.",
+				"Sistema diseñado para optimizar el uso de espacios.",
+				"Acceso rápido a Semana, Mis Reuniones e Historial.",
+			],
+			multipleImages: [
+				"/images/manuals/SALA/presentacionsala.jpg",
+				"/images/manuals/SALA/moduloreservasala.jpg",
+			],
+			imageAlt: "Presentación Reserva de Sala",
+		},
+		{
+			id: "reserva1",
+			stepNumber: 1,
+			title: "Pestañas: Semana y Mis Reuniones",
+			description:
+				"Al momento de entrar al módulo nos aparecerán las opciones principales.",
+			items: [
+				"“Semana” es donde podemos reservar una sala.",
+				"“Mis Reuniones” es donde podemos visualizar si tenemos pendiente alguna reunión o en proceso.",
+			],
+			multipleImages: ["/images/manuals/SALA/semana.jpg"],
+			imageAlt: "Diferenciación de pestañas",
+			reversed: true,
+		},
+		{
+			id: "reserva2",
+			stepNumber: 2,
+			title: "Visualización de Horario",
+			description:
+				"Horario total de la semana y estados de disponibilidad.",
+			items: [
+				"Si vemos bloques grises opacos se entenderá que ese día y horario no están disponibles.",
+				"Podemos elegir el día que queremos reservar, incluso en semanas futuras.",
+				"Contamos con 3 filtros: 'TODAS', 'SALA 1' (Sala Oficina), 'SALA 2' (Sala Comedor).",
+			],
+			multipleImages: ["/images/manuals/SALA/horario.jpg"],
+			imageAlt: "Calendario y filtros",
+		},
+		{
+			id: "reserva3",
+			stepNumber: 3,
+			title: "Selección de Nueva Reserva",
+			description: "Detalla el día y horario que necesitas el espacio.",
+			items: [
+				"Selecciona “NUEVA RESERVA” (1) para abrir el formulario.",
+				"También puedes clicar directamente en un bloque de horario vacío.",
+				"En el lado derecho aparecerá el formulario de “Agendar Nueva Reunión”.",
+			],
+			multipleImages: [
+				"/images/manuals/SALA/nuevareserva.jpg",
+				"/images/manuals/SALA/formnuevareserva.jpg",
+			],
+			imageAlt: "Proceso de reserva",
+			reversed: true,
+		},
+		{
+			id: "reserva4",
+			stepNumber: 4,
+			title: "Completado y Confirmación",
+			description: "Finaliza el registro y valida tu reservación.",
+			items: [
+				"Visualiza el horario disponible sugerido por el sistema.",
+				"Al agendar, se mostrará el mensaje de éxito inmediato.",
+				"La reserva aparecerá en el calendario con título, hora y lugar.",
+			],
+			multipleImages: [
+				"/images/manuals/SALA/agendarreserva.jpg",
+				"/images/manuals/SALA/confirmacionreserva.jpg",
+			],
+			imageAlt: "Reserva exitosa",
+		},
+		{
+			id: "reserva5",
+			stepNumber: 5,
+			title: "Filtrado por Salas",
+			description:
+				"Utiliza los filtros para visualizar la agenda de cada espacio de forma independiente.",
+			items: [
+				"Se podrá ver los filtros por las 3 opciones, el que necesitemos estará disponible.",
+				"“TODAS” = todas las reuniones.",
+				"“SALA 1” = reuniones en esa sala.",
+				"“SALA 2” = reuniones en esa sala.",
+			],
+			multipleImages: [
+				"/images/manuals/SALA/filtro1.jpg",
+				"/images/manuals/SALA/filtro2.jpg",
+				"/images/manuals/SALA/filtro3.jpg",
+			],
+			imageAlt: "Filtrado por salas",
+			reversed: true,
+		},
+		{
+			id: "reserva6",
+			stepNumber: 6,
+			title: "Gestión de 'Mis Reuniones'",
+			description:
+				"Hazle seguimiento a tus sesiones agendadas y por realizar.",
+			items: [
+				"En el formulario al ya estar creado podremos Editar, Cancelar y Cerrar, al cual sea nuestra necesidad.",
+				"El organizador, responsable e invitado será notificado con una alerta momentánea y de igual manera en su bandeja de notificaciones en el cual ahí se visualiza el estado en cual se encuentra “Pendiente” , “PROCESO”, “CANCELADA”.",
+			],
+			multipleImages: [
+				"/images/manuals/SALA/detallereunion.jpg",
+				"/images/manuals/SALA/alerta.jpg",
+				"/images/manuals/SALA/notificaciones.jpg",
+			],
+			imageAlt: "Mis reuniones",
+		},
+	],
+};
+
+const ticketManual = {
+	id: "ticket",
+	label: "Tickets",
+	primaryColor: "#f59e0b", // Amber/Gold
+	glowColor: "#f59e0b",
+	bgDark: "#1a1105", // Deep warm background
+	icon: "fas fa-ticket-simple",
+	steps: [
+		{
+			id: "ticket0",
+			stepNumber: 0,
+			title: "Módulo de Tickets y Soporte",
+			description:
+				"Gestiona incidencias y requerimientos de IT o Mantenimiento.",
+			items: [
+				"Sistema centralizado para reportar problemas técnicos.",
+				"Fácil acceso para todos los colaboradores de Comfutura.",
+				"Seguimiento en tiempo real del estado de tus solicitudes.",
+			],
+			multipleImages: ["/images/manuals/TICKET/moduloticket.jpg"],
+			imageAlt: "Presentación Sistema de Tickets",
+		},
+		{
+			id: "ticket1",
+			stepNumber: 1,
+			title: "Creación de Nuevo Ticket",
+			description: "Registra tu solicitud detallando el problema.",
+			items: [
+				"Selecciona la categoría del problema (Hardware, Software, Red, etc.).",
+				"Describe brevemente la incidencia para ayudar al equipo técnico.",
+				"Adjunta fotos,es necesario para evidenciar el fallo.",
+				"Creamos el ticket de atención.",
+			],
+			multipleImages: [
+				"/images/manuals/TICKET/moduloticket2.jpg",
+				"/images/manuals/TICKET/formticket.jpg",
+				"/images/manuals/TICKET/formticketlleno.jpg",
+			],
+			imageAlt: "Crear ticket",
+			reversed: true,
+		},
+		{
+			id: "ticket2",
+			stepNumber: 2,
+			title: "Prioridad y Seguimiento",
+			description: "Entiende cómo se procesa tu requerimiento.",
+			items: [
+				"Podrás ver detalle de tu ticket solicitado.",
+				"Recibirás notificaciones cuando un técnico tome el caso.",
+			],
+			multipleImages: [
+				"/images/manuals/TICKET/detalle.jpg",
+				"/images/manuals/TICKET/detallevista.jpg",
+			],
+			imageAlt: "Seguimiento de ticket",
+		},
+		{
+			id: "ticket3",
+			stepNumber: 3,
+			title: "Atención y Cierre de Casos",
+			description: "Valida la solución y cierra el proceso.",
+			items: [
+				"Una vez revisado, el ticket pasará a estado 'En proceso'.",
+				"Una vez resuelto, el ticket pasará a estado 'Atendido'.",
+			],
+			multipleImages: [
+				"/images/manuals/TICKET/proceso.jpg",
+				"/images/manuals/TICKET/atendido.jpg",
+			],
+			imageAlt: "Cierre de soporte",
+			reversed: true,
+		},
+	],
+};
+
+const requerimientoManual = {
+	id: "requerimiento",
+	label: "Requerimientos",
+	primaryColor: "#10b981",
+	glowColor: "#10b981",
+	bgDark: "#022c22",
+	icon: "fas fa-file-invoice-dollar",
+	steps: [
+		{
+			id: "req0",
+			stepNumber: 0,
+			title: "Módulo de Requerimientos",
+			description:
+				"Gestiona solicitudes de fondos, compras o rendiciones.",
+			items: [
+				"Acceso centralizado para solicitudes financieras del proyecto.",
+				"Visualización del estado actual (Pendiente, Aprobado, Pagado).",
+				"Identificación clara mediante un Código de Requerimiento único.",
+				"Selecciona 'Nueva Solicitud'.",
+			],
+			multipleImages: [
+				"/images/manuals/REQUERIMIENTO/modulo.jpg",
+				"/images/manuals/REQUERIMIENTO/modulo1.jpg",
+			],
+			imageAlt: "Módulo Requerimientos",
+		},
+		{
+			id: "req1",
+			stepNumber: 1,
+			title: "Creación de Nuevo Requerimiento",
+			description:
+				"Inicia el formulario para solicitar recursos o sustentar gastos.",
+			items: [
+				"Vincula las Órdenes de Trabajo (OTs) relacionadas a esta solicitud.",
+				"Automáticamente detallará de que es el requerimiento.",
+				"Adjuntamos el documento que sustenta el requerimiento.",
+				"Completa los datos solicitados en el formulario.",
+				"El Monto Total se calculará automáticamente en base a tus ingresos.",
+				"Una vez completado el formulario, presiona 'Guardar' para continuar.",
+			],
+			multipleImages: [
+				"/images/manuals/REQUERIMIENTO/formulariorequerimiento.jpg",
+				"/images/manuals/REQUERIMIENTO/formulariolleno1.jpg",
+				"/images/manuals/REQUERIMIENTO/formulariolleno2.jpg",
+				"/images/manuals/REQUERIMIENTO/formulariolleno3.jpg",
+				"/images/manuals/REQUERIMIENTO/formulariolleno4.jpg",
+			],
+			imageAlt: "Crear Requerimiento",
+			reversed: true,
+		},
+		{
+			id: "req2",
+			stepNumber: 2,
+			title: "Detalles y Montos",
+			description:
+				"Agrega los ítems específicos para construir el requerimiento.",
+			items: [
+				"Aceptamos el requerimiento.",
+				"Monstrará el estado del requerimiento.",
+				"Puedes ver detalle de tu requerimiento.",
+				"Culminación del requerimiento.",
+			],
+			multipleImages: [
+				"/images/manuals/REQUERIMIENTO/confirmacion.jpg",
+				"/images/manuals/REQUERIMIENTO/detallefoto.jpg",
+				"/images/manuals/REQUERIMIENTO/detalle.jpg",
+			],
+			imageAlt: "Detalles del Requerimiento",
+		},
+	],
+};
+---
+
+<Layout title="Plataforma de Manuales">
+	<main>
+		<CanvaPresentation
+			manuals={[
+				ssomaManual,
+				reservaManual,
+				ticketManual,
+				requerimientoManual,
+			]}
+		/>
+	</main>
+</Layout>
+
+<style>
+	main {
+		width: 100vw;
+		height: 100vh;
+		overflow: hidden;
+		background: #000;
+	}
+
+	@media print {
+		main {
+			height: auto !important;
+			overflow: visible !important;
+			background: #fff !important;
+		}
+	}
+</style>

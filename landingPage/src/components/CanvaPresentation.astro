@@ -1,0 +1,658 @@
+---
+import CanvaSlide from './CanvaSlide.astro';
+
+interface Step {
+	id: string;
+	stepNumber: number;
+	title: string;
+	description: string;
+	items: string[];
+	multipleImages: string[];
+	imageAlt: string;
+	reversed?: boolean;
+}
+
+interface Manual {
+	id: string;
+	label: string;
+	primaryColor: string;
+	glowColor: string;
+	bgDark: string;
+	icon: string;
+	steps: Step[];
+}
+
+interface Props {
+	manuals: Manual[];
+}
+
+const { manuals } = Astro.props;
+---
+
+<div class="canva-dashboard" id="canva-root">
+	<!-- Mesh Background Layer -->
+	<div class="mesh-container">
+		<div class="glow-blob blob-1"></div>
+		<div class="glow-blob blob-2"></div>
+		<div class="glow-blob blob-3"></div>
+		<div class="glow-blob blob-4"></div>
+		<div class="glow-blob blob-5"></div>
+	</div>
+
+	<!-- Top Header -->
+	<header class="canva-header">
+		<div class="header-left">
+			<div class="manual-switcher">
+				{manuals.map((m, i) => (
+					<button 
+						class:list={["manual-tab", { active: i === 0 }]} 
+						data-manual-index={i}
+						data-primary={m.primaryColor}
+						data-glow={m.glowColor}
+						data-bg-dark={m.bgDark}
+						data-icon={m.icon}
+						draggable="true"
+					>
+						<i class={m.icon}></i>
+						<span>{m.label}</span>
+					</button>
+				))}
+			</div>
+		</div>
+		<div class="header-right" style="display: flex; align-items: center; gap: 1.5rem;">
+			<!-- Playback Controls -->
+			<button id="canva-play-pause" class="canva-fs-btn" style="width: 44px; height: 44px; padding: 0; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(255,255,255,0.1) !important; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2) !important; margin-left: auto;">
+				<i class="fas fa-pause" style="margin: 0;"></i>
+			</button>
+			<div class="canva-logo">
+				<!-- Official PNG Logo -->
+				<img src="/images/manuals/LOGO/comfutura.png" alt="Comfutura" class="official-logo-img" />
+			</div>
+		</div>
+		<!-- Very Discreet Timer (Top) -->
+		<div class="canva-timer-strip"><div id="canva-progress"></div></div>
+	</header>
+
+	<!-- Main Presentation Stage (Wrappers for each manual) -->
+	{manuals.map((manual, mIdx) => (
+		<main class:list={["canva-stage", { active: mIdx === 0 }]} data-manual-stage={mIdx}>
+			<button class="stage-nav-btn prev canva-prev">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg>
+			</button>
+			
+			<div class="slides-container">
+				{manual.steps.map((step, index) => (
+					<div class:list={["canva-slide-wrapper", { active: index === 0 }]} data-index={index}>
+						<CanvaSlide {...step} />
+					</div>
+				))}
+			</div>
+
+			<button class="stage-nav-btn next canva-next">
+				<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg>
+			</button>
+
+			<!-- Small & Discreet Ribbon Footer (Integrated per stage) -->
+			<footer class="canva-footer">
+				<div class="ribbon-overlay">
+					<div class="ribbon-scroll canva-ribbon">
+						{manual.steps.map((step, index) => (
+							<div class:list={["ribbon-item", { active: index === 0 }]} data-index={index}>
+								<div class="ribbon-thumb">
+									<img src={step.multipleImages[0]} alt="" />
+								</div>
+								<div class="ribbon-number">{index + 1}</div>
+							</div>
+						))}
+					</div>
+				</div>
+				<div class="slide-indicator">
+					<span class="canva-current">1</span> de {manual.steps.length}
+				</div>
+			</footer>
+		</main>
+	))}
+
+	<!-- Fixed Controls -->
+	<div class="fixed-actions">
+		<button id="canva-download" class="canva-fs-btn download-pdf">
+			<i class="fas fa-file-pdf"></i>
+			<span>DESCARGAR PDF</span>
+		</button>
+
+		<button id="canva-fullscreen" class="canva-fs-btn">
+			<i class="fas fa-expand"></i>
+			<span>PROYECTAR</span>
+		</button>
+	</div>
+
+</div>
+
+<!-- Print Layouts (Pre-rendered for reliability/Security) -->
+	<div id="print-zone" class="print-container">
+		{manuals.map((manual, mIdx) => (
+			<div class="manual-print-layout" data-print-manual={mIdx}>
+				<!-- Page 1: Cover -->
+				<div class="print-page print-cover">
+					<img src="/images/manuals/LOGO/comfutura.png" alt="Comfutura Logo" />
+					<h1 style="color: #333 !important; font-size: 4rem; margin-top: 2rem;">{manual.label}</h1>
+				</div>
+				<!-- Pages 2+: Steps -->
+				{manual.steps.map((step, sIdx) => (
+					<div class="print-page">
+						<div class="print-slide-grid">
+							<div class="print-text">
+								<span>PASO {String(sIdx + 1).padStart(2, '0')}</span>
+								<h2>{step.title}</h2>
+								<p>{step.description}</p>
+								<ul>
+									{step.items.map(item => (
+										<li><i class="fas fa-check" style="color: #c8102e; margin-right: 10px;"></i> {item}</li>
+									))}
+								</ul>
+							</div>
+							<div class={`print-image image-count-${step.multipleImages.length}`}>
+								{step.multipleImages.map(img => (
+									<img src={img} alt={step.imageAlt} />
+								))}
+							</div>
+						</div>
+					</div>
+				))}
+			</div>
+		))}
+	</div>
+
+<style>
+	:root {
+		--brand-primary: #c8102e; /* Default Red */
+		--brand-glow: #c8102e;
+		--brand-bg-dark: #330000;
+	}
+
+	.canva-dashboard {
+		position: fixed !important;
+		inset: 0 !important;
+		background: #000 !important;
+		color: #fff !important;
+		display: flex !important;
+		flex-direction: column !important;
+		z-index: 10000 !important;
+		font-family: 'Inter', sans-serif;
+		overflow: hidden;
+	}
+
+	/* Switcher Tabs */
+	.manual-switcher { display: flex; gap: 0.5rem; background: rgba(0,0,0,0.3); padding: 0.35rem; border-radius: 60px; border: 1px solid rgba(255,255,255,0.08); backdrop-filter: blur(20px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+	.manual-tab { 
+		padding: 0.45rem 1.1rem; border-radius: 40px; font-size: 0.65rem; font-weight: 800; cursor: pointer; border: 1px solid transparent; background: transparent; color: rgba(255,255,255,0.3); transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+		text-transform: uppercase; letter-spacing: 1.2px;
+		display: flex; align-items: center; gap: 0.6rem;
+		user-select: none;
+	}
+	.manual-tab i { font-size: 0.75rem; transition: transform 0.3s; }
+	.manual-tab.active { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.2), inset 0 0 20px rgba(255,255,255,0.05), 0 0 15px color-mix(in srgb, var(--brand-primary), transparent 60%); }
+	.manual-tab.active i { transform: scale(1.2); color: var(--brand-primary); filter: drop-shadow(0 0 8px var(--brand-primary)); }
+	.manual-tab:hover:not(.active) { color: #fff; background: rgba(255,255,255,0.05); }
+
+	/* Mesh Background */
+	.mesh-container { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: -1; }
+	.glow-blob { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.15; animation: float 30s infinite alternate ease-in-out; }
+	.blob-1 { width: 800px; height: 800px; background: var(--brand-glow); top: -200px; left: -200px; }
+	.blob-2 { width: 700px; height: 700px; background: var(--brand-glow); bottom: -200px; right: -200px; animation-delay: -8s; }
+	.blob-3 { width: 600px; height: 600px; background: #9333ea; top: 50%; left: 50%; animation-delay: -15s; }
+	.blob-4 { width: 400px; height: 400px; background: var(--brand-primary); top: 10%; right: 20%; opacity: 0.08; }
+	.blob-5 { width: 500px; height: 500px; background: #3b82f6; bottom: 10%; left: 10%; opacity: 0.08; animation-delay: -20s; }
+	@keyframes float { from { transform: translate(0,0) scale(1); } to { transform: translate(180px, 120px) scale(1.1); } }
+
+	/* Header */
+	.canva-header {
+		height: 60px;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0 2rem;
+		background: rgba(0,0,0,0.8);
+		position: relative;
+		border-bottom: 2px solid rgba(255,255,255,0.05); 
+		transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+		backdrop-filter: blur(10px);
+	}
+	.canva-logo { height: 40px; display: flex; align-items: center; }
+	.official-logo-img { height: 100%; width: auto; object-fit: contain; filter: drop-shadow(0 0 10px rgba(0,0,0,0.5)); }
+	.fixed-actions {
+		position: fixed;
+		bottom: 1.5rem;
+		left: 1.5rem;
+		z-index: 20000;
+		display: flex;
+		gap: 0.75rem;
+	}
+	.canva-fs-btn {
+		background: rgba(15,15,20,0.6);
+		border: 1px solid rgba(255,255,255,0.1);
+		color: #fff;
+		padding: 0.75rem 1.25rem;
+		border-radius: 60px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		gap: 0.6rem;
+		font-size: 0.65rem;
+		font-weight: 800;
+		letter-spacing: 1px;
+		transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		backdrop-filter: blur(20px);
+		box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+	}
+	.canva-fs-btn.download-pdf { border-color: rgba(255,255,255,0.05); }
+	.canva-fs-btn.download-pdf:hover { background: #c8102e; border-color: #c8102e; }
+	.canva-fs-btn:hover { background: rgba(255,255,255,0.12); transform: translateY(-4px); border-color: var(--brand-primary); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+	.canva-fs-btn i { font-size: 0.9rem; }
+
+	.canva-timer-strip { position: absolute; bottom: -1px; left: 0; width: 100%; height: 3px; background: rgba(255,255,255,0.05); z-index: 10; }
+	#canva-progress { width: 0%; height: 100%; background: #fff; box-shadow: 0 0 15px #fff, 0 0 5px var(--brand-primary); transition: width 0.1s linear; }
+
+	/* Stage */
+	.canva-stage {
+		position: absolute;
+		inset: 60px 0 0 0;
+		opacity: 0;
+		pointer-events: none;
+		display: flex; /* Maintain layout structure */
+		flex-direction: column;
+		transition: opacity 0.4s ease;
+		z-index: 1;
+	}
+	.canva-stage.active { 
+		opacity: 1; 
+		pointer-events: all; 
+		z-index: 2;
+	}
+
+	.slides-container { flex: 1; position: relative; width: 100%; max-width: 1650px; margin: 0 auto; display: flex; align-items: center; justify-content: center; min-height: 0; padding-bottom: 70px; }
+
+	/* Premium Floating Arrows */
+	.stage-nav-btn {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		width: 50px; height: 50px;
+		background: rgba(255,255,255,0.02);
+		border: 1px solid rgba(255,255,255,0.06);
+		border-radius: 50%;
+		color: #fff;
+		cursor: pointer;
+		display: flex; align-items: center; justify-content: center;
+		z-index: 100;
+		transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		backdrop-filter: blur(10px);
+	}
+	.stage-nav-btn svg { width: 20px; height: 20px; }
+	.stage-nav-btn:hover { background: var(--brand-primary); border-color: var(--brand-primary); box-shadow: 0 0 20px color-mix(in srgb, var(--brand-primary), transparent 50%); }
+	.stage-nav-btn.prev { left: 2rem; }
+	.stage-nav-btn.next { right: 2rem; }
+
+	.canva-slide-wrapper { position: absolute; inset: 0; display: none; align-items: center; justify-content: center; overflow: hidden; height: 100%; }
+	.canva-slide-wrapper.active { display: flex; animation: slideReveal 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+	
+	@media (max-width: 1024px) {
+		.canva-slide-wrapper { overflow-y: auto; align-items: flex-start; }
+	}
+	@keyframes slideReveal { 
+		from { opacity: 0; transform: translateY(20px) scale(0.95); filter: blur(10px); } 
+		to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); } 
+	}
+
+	/* Minimal Ribbon Footers */
+	.canva-footer {
+		height: 70px;
+		display: flex;
+		align-items: flex-end;
+		background: linear-gradient(transparent, rgba(0,0,0,0.8));
+		border-top: 1px solid rgba(255,255,255,0.03);
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		z-index: 10;
+		padding-bottom: 0.5rem;
+	}
+	.ribbon-overlay { flex: 1; display: flex; align-items: center; overflow-x: auto; padding: 0 6rem; scrollbar-width: none; }
+	.ribbon-overlay::-webkit-scrollbar { display: none; }
+	.ribbon-scroll { display: flex; gap: 0.75rem; margin: 0 auto; }
+	.ribbon-item { width: 60px; display: flex; flex-direction: column; align-items: center; gap: 0.35rem; cursor: pointer; opacity: 0.3; transition: all 0.3s; }
+	.ribbon-thumb { width: 100%; height: 36px; background: #0a0a0a; border-radius: 4px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+	.ribbon-thumb img { width: 100%; height: 100%; object-fit: cover; }
+	.ribbon-number { font-size: 0.6rem; font-weight: 800; color: rgba(255,255,255,0.4); }
+	.ribbon-item:hover { opacity: 0.7; transform: translateY(-2px); }
+	.ribbon-item.active { opacity: 1; transform: translateY(-4px); }
+	.ribbon-item.active .ribbon-thumb { border-color: var(--brand-primary); }
+	.ribbon-item.active .ribbon-number { color: #fff; }
+
+	.slide-indicator { position: absolute; right: 2rem; bottom: 0.5rem; font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.2); }
+
+	@media (max-width: 1024px) {
+		.canva-header { padding: 0 1rem; height: 60px; justify-content: center; }
+		.canva-logo { display: none; }
+		.manual-switcher { 
+			padding: 0.25rem; 
+			gap: 0.25rem; 
+			background: rgba(0,0,0,0.5); 
+			border-radius: 40px; 
+			max-width: 95vw;
+			overflow-x: auto;
+			flex-wrap: nowrap;
+			-webkit-overflow-scrolling: touch;
+		}
+		.manual-switcher::-webkit-scrollbar { display: none; }
+		.manual-switcher { -ms-overflow-style: none; scrollbar-width: none; }
+		
+		.manual-tab { padding: 0.35rem 0.8rem; font-size: 0.6rem; letter-spacing: 0.5px; gap: 0.4rem; border-radius: 30px; flex-shrink: 0; }
+		.manual-tab span { display: none; }
+		.manual-tab.active span { display: inline-block; }
+		.canva-stage { inset: 60px 0 0 0; }
+		.glow-blob { filter: blur(60px); opacity: 0.1; }
+	}
+
+	@media (min-width: 768px) and (max-width: 1024px) {
+		.canva-logo { display: flex; height: 30px; }
+		.manual-tab span { display: inline-block; }
+	}
+
+	@media (max-width: 768px), (max-height: 600px) {
+		.canva-header { height: auto; min-height: 48px; padding: 0.5rem 1rem; border-bottom-width: 1px; flex-direction: column; gap: 0.5rem; }
+		.header-right { margin-left: auto; }
+		.manual-tab { padding: 0.35rem 0.75rem; font-size: 0.6rem; }
+		.logo-box { width: 28px; height: 28px; }
+		.canva-logo span { display: none; }
+		.canva-stage { min-height: 400px; height: auto; }
+		.slides-container { height: auto; min-height: 50vh; }
+		.canva-footer { height: auto; min-height: 75px; padding: 0.5rem 0; flex-direction: column; }
+		.ribbon-overlay { padding: 0.5rem 1rem; width: 100%; }
+		.slide-indicator { position: relative; right: auto; bottom: auto; margin: 0.5rem 0; }
+		.stage-nav-btn { width: 34px; height: 34px; top: 30%; }
+	}
+	.print-container { display: none; }
+	@media print {
+		html, body { 
+			height: auto !important; 
+			overflow: visible !important; 
+			background: #fff !important; 
+		}
+		.canva-dashboard { display: none !important; visibility: hidden !important; }
+		.print-container { 
+			display: block !important; 
+			background: #fff !important; 
+			color: #000 !important; 
+			visibility: visible !important;
+			position: static !important;
+		}
+
+		/* Only show the current manual */
+		.manual-print-layout { display: none !important; }
+		[data-active-print] .manual-print-layout { display: none !important; }
+		
+		#print-zone[data-active-print="0"] [data-print-manual="0"],
+		#print-zone[data-active-print="1"] [data-print-manual="1"],
+		#print-zone[data-active-print="2"] [data-print-manual="2"],
+		#print-zone[data-active-print="3"] [data-print-manual="3"],
+		#print-zone[data-active-print="4"] [data-print-manual="4"],
+		#print-zone[data-active-print="5"] [data-print-manual="5"],
+		#print-zone[data-active-print="6"] [data-print-manual="6"],
+		#print-zone[data-active-print="7"] [data-print-manual="7"],
+		#print-zone[data-active-print="8"] [data-print-manual="8"],
+		#print-zone[data-active-print="9"] [data-print-manual="9"] { 
+			display: block !important; 
+		}
+
+		.print-page { 
+			page-break-after: always; 
+			break-after: page;
+			min-height: 100vh;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			padding: 4rem;
+			color: #000 !important;
+		}
+		.print-cover {
+			text-align: center;
+			align-items: center;
+		}
+		.print-cover img { max-width: 250px; margin-bottom: 2rem; filter: none !important; }
+		.print-cover h1 { font-size: 3.2rem; color: #c8102e !important; margin: 1rem 0; font-family: 'Outfit', sans-serif; font-weight: 800; }
+		.print-cover h2 { font-size: 2.2rem; color: #333 !important; font-family: 'Outfit', sans-serif; }
+		.print-slide-grid {
+			display: grid;
+			grid-template-columns: 1fr 1.25fr;
+			gap: 4rem;
+			align-items: center;
+			width: 100%;
+		}
+		.print-text { text-align: left; }
+		.print-text span { font-weight: 800; color: #c8102e; font-size: 1rem; border-bottom: 2px solid #c8102e; padding-bottom: 4px; }
+		.print-text h2 { font-size: 2.4rem; margin: 1rem 0 1.5rem 0; color: #000 !important; font-family: 'Outfit', sans-serif; font-weight: 700; line-height: 1.1; }
+		.print-text p { font-size: 1.15rem; color: #444; margin-bottom: 2rem; line-height: 1.6; }
+		.print-text ul { list-style: none; padding: 0; }
+		.print-text li { margin-bottom: 0.85rem; font-size: 1.1rem; display: flex; align-items: flex-start; gap: 12px; line-height: 1.4; }
+		.print-image { 
+			display: grid;
+			gap: 1.5rem;
+			width: 100%;
+			align-items: center;
+		}
+		.print-image img { 
+			width: 100%; 
+			height: auto;
+			object-fit: contain; 
+			border: 1px solid #eee; 
+			border-radius: 12px; 
+			box-shadow: 0 10px 30px rgba(0,0,0,0.05); 
+		}
+		
+		/* Distribución dinámica por cantidad de imágenes */
+		.print-image.image-count-1 { grid-template-columns: 1fr; }
+		.print-image.image-count-1 img { max-height: 550px; }
+
+		.print-image.image-count-2 { grid-template-columns: 1fr; }
+		.print-image.image-count-2 img { max-height: 280px; }
+
+		.print-image.image-count-3 { 
+			grid-template-columns: 1fr 1fr; 
+			grid-template-areas: "img1 img1" "img2 img3";
+			gap: 1rem;
+		}
+		.print-image.image-count-3 img:nth-child(1) { grid-area: img1; max-height: 300px; }
+		.print-image.image-count-3 img:nth-child(2) { grid-area: img2; max-height: 200px; }
+		.print-image.image-count-3 img:nth-child(3) { grid-area: img3; max-height: 200px; }
+
+		.print-image.image-count-4 { grid-template-columns: 1fr 1fr; gap: 1rem; }
+		.print-image.image-count-4 img { max-height: 250px; }
+	}
+</style>
+
+<script is:inline>
+	const root = document.getElementById('canva-root');
+	const progress = document.getElementById('canva-progress');
+	const tabs = document.querySelectorAll('.manual-tab');
+	const stages = document.querySelectorAll('.canva-stage');
+	const fullscreenBtn = document.getElementById('canva-fullscreen');
+	const downloadBtn = document.getElementById('canva-download');
+	const printZone = document.getElementById('print-zone');
+	const playPauseBtn = document.getElementById('canva-play-pause');
+	
+	let activeManualIdx = 0;
+	let currentIdx = 0;
+	let timer = null;
+	let imgTimer = null;
+	let startTime = Date.now();
+	let duration = 20000;
+	let isPaused = false;
+
+	const setManual = (idx) => {
+		activeManualIdx = idx;
+		tabs.forEach((t, i) => t.classList.toggle('active', i === idx));
+		stages.forEach((s, i) => s.classList.toggle('active', i === idx));
+		
+		// Update Theming
+		const tab = tabs[idx];
+		root.style.setProperty('--brand-primary', tab.dataset.primary);
+		root.style.setProperty('--brand-glow', tab.dataset.glow);
+		root.style.setProperty('--brand-bg-dark', tab.dataset.bgDark);
+		
+		updateSlide(0);
+	};
+
+	const updateSlide = (idx) => {
+		const currentStage = stages[activeManualIdx];
+		const slides = currentStage.querySelectorAll('.canva-slide-wrapper');
+		const tiles = currentStage.querySelectorAll('.ribbon-item');
+		const currentText = currentStage.querySelector('.canva-current');
+
+		currentIdx = (idx + slides.length) % slides.length;
+		
+		// Set Dynamic Duration
+		const isIntro = currentIdx === 0;
+		duration = isIntro ? 20000 : 10000;
+		
+		slides.forEach(s => s.classList.remove('active'));
+		tiles.forEach(t => t.classList.remove('active'));
+		
+		slides[currentIdx].classList.add('active');
+		tiles[currentIdx].classList.add('active');
+		currentText.textContent = currentIdx + 1;
+		
+		tiles[currentIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+		resetTimer();
+	};
+
+	const resetTimer = () => {
+		clearInterval(timer);
+		clearInterval(imgTimer);
+		startTime = Date.now();
+		progress.style.width = '0%';
+		isPaused = false;
+		if (playPauseBtn) playPauseBtn.innerHTML = '<i class="fas fa-pause" style="margin: 0;"></i>';
+		
+		const currentStage = stages[activeManualIdx];
+		const currentSlide = currentStage.querySelectorAll('.canva-slide-wrapper')[currentIdx];
+		const subThumbs = currentSlide.querySelectorAll('.canva-thumb-btn');
+		
+		if (subThumbs.length > 1) {
+			const imgDuration = duration / subThumbs.length;
+			imgTimer = setInterval(() => {
+				if (isPaused) return; // Halt image rotation while paused
+				const activeThumb = currentSlide.querySelector('.canva-thumb-btn.active');
+				let subIdx = parseInt(activeThumb?.dataset.index || "0");
+				let nextIdx = (subIdx + 1) % subThumbs.length;
+				subThumbs[nextIdx].click();
+			}, imgDuration);
+		}
+
+		timer = setInterval(() => {
+			if (isPaused) {
+				startTime += 100;
+				return;
+			}
+			const elapsed = Date.now() - startTime;
+			const p = (elapsed / duration) * 100;
+			if (p >= 100) { updateSlide(currentIdx + 1); } 
+			else { progress.style.width = `${p}%`; }
+		}, 100);
+	};
+
+	// Handlers
+	tabs.forEach(tab => {
+		tab.onclick = () => setManual(parseInt(tab.dataset.manualIndex));
+	});
+
+	// Drag and Drop Logic
+	const switcher = document.querySelector('.manual-switcher');
+	let draggedItem = null;
+
+	switcher.addEventListener('dragstart', (e) => {
+		draggedItem = e.target.closest('.manual-tab');
+		draggedItem.style.opacity = '0.5';
+		e.dataTransfer.effectAllowed = 'move';
+	});
+
+	switcher.addEventListener('dragend', (e) => {
+		draggedItem.style.opacity = '1';
+		draggedItem = null;
+	});
+
+	switcher.addEventListener('dragover', (e) => {
+		e.preventDefault();
+		const overItem = e.target.closest('.manual-tab');
+		if (overItem && overItem !== draggedItem) {
+			const rect = overItem.getBoundingClientRect();
+			const next = (e.clientX - rect.left) > (rect.width / 2);
+			switcher.insertBefore(draggedItem, next ? overItem.nextSibling : overItem);
+		}
+	});
+
+	switcher.addEventListener('drop', (e) => {
+		e.preventDefault();
+		const order = Array.from(switcher.children).map(child => child.dataset.manualIndex);
+		localStorage.setItem('canva_manual_order', JSON.stringify(order));
+	});
+
+	// Initialize Order from LocalStorage
+	const savedOrder = localStorage.getItem('canva_manual_order');
+	if (savedOrder) {
+		const order = JSON.parse(savedOrder);
+		order.forEach(id => {
+			const tab = Array.from(tabs).find(t => t.dataset.manualIndex === id);
+			if (tab) switcher.appendChild(tab);
+		});
+	}
+
+	stages.forEach((stage, sIdx) => {
+		stage.querySelector('.canva-next').onclick = () => updateSlide(currentIdx + 1);
+		stage.querySelector('.canva-prev').onclick = () => updateSlide(currentIdx - 1);
+		stage.querySelectorAll('.ribbon-item').forEach(tile => {
+			tile.onclick = () => updateSlide(parseInt(tile.dataset.index));
+		});
+	});
+
+	playPauseBtn.onclick = () => {
+		isPaused = !isPaused;
+		if (isPaused) {
+			playPauseBtn.innerHTML = '<i class="fas fa-play" style="margin: 0;"></i>';
+		} else {
+			playPauseBtn.innerHTML = '<i class="fas fa-pause" style="margin: 0;"></i>';
+		}
+	};
+
+	fullscreenBtn.onclick = () => {
+		if (!document.fullscreenElement) root.requestFullscreen();
+		else document.exitFullscreen();
+	};
+
+	downloadBtn.onclick = () => {
+		// Set which pre-rendered manual to show in print
+		printZone.setAttribute('data-active-print', activeManualIdx);
+		
+		// Update document title for PDF file naming
+		const originalTitle = document.title;
+		const activeTab = tabs[activeManualIdx];
+		if (activeTab) {
+			const manualName = activeTab.querySelector('span').textContent;
+			document.title = manualName;
+		}
+		
+		window.print();
+		
+		// Restore original title
+		document.title = originalTitle;
+	};
+
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'ArrowRight') updateSlide(currentIdx + 1);
+		if (e.key === 'ArrowLeft') updateSlide(currentIdx - 1);
+	});
+
+	// Initialize
+	setManual(0);
+</script>
