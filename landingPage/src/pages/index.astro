@@ -453,7 +453,6 @@ const requerimientoManual = {
 				"Gestiona solicitudes de fondos, compras o rendiciones.",
 			items: [
 				"Acceso centralizado para solicitudes financieras del proyecto.",
-				"Visualización del estado actual (Pendiente, Aprobado, Pagado).",
 				"Identificación clara mediante un Código de Requerimiento único.",
 				"Selecciona 'Nueva Solicitud'.",
 			],
@@ -508,6 +507,96 @@ const requerimientoManual = {
 		},
 	],
 };
+
+const ordenCompraManual = {
+	id: "orden-compra",
+	label: "Orden de Compra",
+	primaryColor: "#8b5cf6",
+	glowColor: "#8b5cf6",
+	bgDark: "#1e1b4b",
+	icon: "fas fa-file-invoice",
+	steps: [
+		{
+			id: "oc0",
+			stepNumber: 0,
+			title: "Módulo de Orden de Compra de Cliente",
+			description: "Gestión integral de pedidos y contratos comerciales.",
+			items: [
+				"Visualización de todas las órdenes de compra activas.",
+				"Acceso directo para la creación de nuevos documentos.",
+				"Seguimiento del estado de facturación y entrega.",
+			],
+			multipleImages: ["/images/manuals/ORDEN_COMPRA/oc.jpg"],
+			imageAlt: "Presentación Orden de Compra",
+		},
+		{
+			id: "oc1",
+			stepNumber: 1,
+			title: "Selección de Módulo y Llenado Formulario",
+			description: "Identifica el módulo y llena el formulario.",
+			items: [
+				"Nos dirigimos a nuestro dashboard y elegimos el módulo indicado (1).",
+				"Para cargar una nueva Orden de Compra del Cliente seleccionamos 'Cargar Nueva' (2).",
+			],
+			multipleImages: ["/images/manuals/ORDEN_COMPRA/oc1.jpg"],
+			imageAlt: "Selección de cliente",
+			reversed: true,
+		},
+		{
+			id: "oc2",
+			stepNumber: 2,
+			title: "Proceso de llenado de formulario",
+			description: "Ingresa cada ítem que conforma la orden.",
+			items: [
+				"Elegimos el archivo a subir para que nos de detalle del contenido.(1)",
+				"Seleccionamos 'Extraer con IA Backend'.(2)",
+				"El sistema nos confirmará si hizo el correcto llenado de datos.",
+			],
+			multipleImages: [
+				"/images/manuals/ORDEN_COMPRA/form.jpg",
+				"/images/manuals/ORDEN_COMPRA/confirm.jpg",
+			],
+
+			imageAlt: "Detalle de productos",
+		},
+		{
+			id: "oc3",
+			stepNumber: 3,
+			title: "Llenado Detallado",
+			description: "Condiciones.",
+			items: [
+				"Nos mostrará los datos extraídos, para añadirme su OT(1).",
+				"Como usuario el llenado será según la OT que necesitamos, así consecutivamente detalle por detalle.",
+				"Como ayuda podemos filtrar por el código de SITE (2).",
+				"Para poder guardar tenemos que llenar todo con su debida OT y hacemos click en 'REGISTRAR OC EN SISTEMA'(3) ",
+			],
+			multipleImages: [
+				"/images/manuals/ORDEN_COMPRA/llenado.jpg",
+				"/images/manuals/ORDEN_COMPRA/confirm2.jpg",
+			],
+			imageAlt: "Totales y términos",
+			reversed: true,
+		},
+		{
+			id: "oc4",
+			stepNumber: 4,
+			title: "Confirmación y Listado",
+			description: "Finaliza el registro y realiza el seguimiento.",
+			items: [
+				"Nos mostrará un mensaje de confirmación de la carga de Orden de Compra del Cliente.",
+				"Acceso al historial desde el listado principal.",
+				"Opción de descarga y visualización rápida del documento.",
+				"Podrás visualizar el listado del documento que se lleno más su respectiva OT.",
+			],
+			multipleImages: [
+				"/images/manuals/ORDEN_COMPRA/exitodoc.jpg",
+				"/images/manuals/ORDEN_COMPRA/list.jpg",
+				"/images/manuals/ORDEN_COMPRA/final.jpg",
+			],
+			imageAlt: "Confirmación de registro",
+		},
+	],
+};
 ---
 
 <Layout title="Plataforma de Manuales">
@@ -518,6 +607,7 @@ const requerimientoManual = {
 				reservaManual,
 				ticketManual,
 				requerimientoManual,
+				ordenCompraManual,
 			]}
 		/>
 	</main>
