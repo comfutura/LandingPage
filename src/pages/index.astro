@@ -510,7 +510,7 @@ const requerimientoManual = {
 
 const ordenCompraManual = {
 	id: "orden-compra",
-	label: "Orden de Compra",
+	label: "Orden de Compra Cliente",
 	primaryColor: "#8b5cf6",
 	glowColor: "#8b5cf6",
 	bgDark: "#1e1b4b",
@@ -597,6 +597,139 @@ const ordenCompraManual = {
 		},
 	],
 };
+
+const costoDirectoManual = {
+	id: "costo-directo",
+	label: "Costo Directo",
+	primaryColor: "#06b6d4",
+	glowColor: "#06b6d4",
+	bgDark: "#083344",
+	icon: "fas fa-coins",
+	steps: [
+		{
+			id: "cd0",
+			stepNumber: 0,
+			title: "Módulo de Costo Directo (CD)",
+			description:
+				"Control y seguimiento detallado de los costos directos creados.",
+			items: [
+				"Gestión integral de creación de costo directo.",
+				"Visualización en tiempo real del presupuesto ejecutado.",
+				"Sincronización directa con el proceso.",
+			],
+			multipleImages: ["/images/manuals/COSTO_DIRECTO/inicio1.jpg"],
+			imageAlt: "Presentación Costo Directo",
+		},
+		{
+			id: "cd1",
+			stepNumber: 1,
+			title: "Acceso al Módulo",
+			description: "Localiza la herramienta en tu panel de control.",
+			items: [
+				"Ingresa a tu dashboard principal.",
+				"Selecciona el ícono de 'Costo Directo' (1).",
+				"Seleccionamos 'Nuevo Costo Directo' para generar uno nuevo (2).",
+			],
+			multipleImages: ["/images/manuals/COSTO_DIRECTO/inicio.jpg"],
+			imageAlt: "Acceso al módulo",
+			reversed: true,
+		},
+		{
+			id: "cd2",
+			stepNumber: 2,
+			title: "Formulario 'Costo Directo'",
+			description: "Analiza el estado financiero de cada partida.",
+			items: [
+				"Seleccionamos OT (1) , se llenará los campos de forma automática.",
+				"El campo 'Orden de compra VINCULADA' es opcional (2).",
+				"Le damos click en la icono de archivo (3)",
+				"Cargamos el excel en 'presupuesto de venta' .",
+				"Tenemos 3 formas de llenar, 'Importar Excel', 'Monto Global' y 'Cargar Catálogo (4)'",
+				"El 'catálogo' esta implementado en 2 clientes, 'CLIENTE CLARO : TI, SAQ'   'CLIENTE ENTEL : PEXT'",
+			],
+			multipleImages: [
+				"/images/manuals/COSTO_DIRECTO/formcd.jpg",
+				"/images/manuals/COSTO_DIRECTO/formcd1.jpg",
+				"/images/manuals/COSTO_DIRECTO/formcd3.jpg",
+				"/images/manuals/COSTO_DIRECTO/saqcata.jpg",
+				"/images/manuals/COSTO_DIRECTO/cosdirecllen.jpg",
+			],
+			imageAlt: "Reportes de costos",
+		},
+		{
+			id: "cd3",
+			stepNumber: 3,
+			title: "Formulario 'Costo Directo' 2",
+			description: "Ingresa nuevos consumos o facturas al sistema.",
+			items: [
+				"Dertallamos el porcentaje de liquidación (1).",
+				"Visualizaremos el margen del precio real (2).",
+			],
+			multipleImages: [
+				"/images/manuals/COSTO_DIRECTO/formcd2.jpg",
+				"/images/manuals/COSTO_DIRECTO/formcd2-1.jpg",
+			],
+			imageAlt: "Carga de datos",
+			reversed: true,
+		},
+		{
+			id: "cd4",
+			stepNumber: 4,
+			title: "Gestión de pestañas",
+			description: "Categoriza cada gasto según la pestaña requerida.",
+			items: [
+				"Seleccionamos la pestaña que vamos a detallar (1).",
+				"Detallaremos 'MATERIALES'",
+				"Materiales : buscamos y seleccionamos el material (1), detallamos cantidad, precio unitario detalla IGV (2), detallamos con IGV o sin IGV (3) .",
+				"Seleccionamos 'AGREGAR A LA LISTA'",
+				"Nos mostratrá el detalle del material agregado (5).",
+			],
+			multipleImages: [
+				"/images/manuals/COSTO_DIRECTO/pestañas.jpg",
+				"/images/manuals/COSTO_DIRECTO/pest1.jpg",
+				"/images/manuals/COSTO_DIRECTO/pest1.1.jpg",
+				"/images/manuals/COSTO_DIRECTO/pest1.2.jpg",
+			],
+			imageAlt: "Desglose de costos",
+		},
+		{
+			id: "cd5",
+			stepNumber: 5,
+			title: "Pestaña Otros Gastos - Cronograma",
+			description:
+				"Explicación de la pestaña 'Otros Gastos' y 'Cronograma'.",
+			items: [
+				"En la pestaña 'Otros Gastos' se detallan los gastos que no encontremos en ninguna otra pestaña, gastos adicionales, los pasos son similares.",
+				"En la pestaña 'Cronograma'tenemos que adicionar mínimo un día para que tenga validez el cronograma.",
+			],
+			multipleImages: [
+				"/images/manuals/COSTO_DIRECTO/otrosgastos.jpg",
+				"/images/manuals/COSTO_DIRECTO/diagramagantt.jpg",
+				"/images/manuals/COSTO_DIRECTO/ejemplo.jpg",
+			],
+			imageAlt: "Finalización del registro",
+			reversed: true,
+		},
+		{
+			id: "cd6",
+			stepNumber: 6,
+			title: "Grabado y Enviar a Aprobación",
+			description: "Proceso Final.",
+			items: [
+				"En el bloque de grabado es una pausa, podemos guardar y luego verificar para enviar a aprobación (1).",
+				"En Enviar a Aprobación mandamos directamente a aprobación (2).",
+			],
+			multipleImages: [
+				"/images/manuals/COSTO_DIRECTO/aprobacion.jpg",
+				"/images/manuals/COSTO_DIRECTO/guardado.jpg",
+				"/images/manuals/COSTO_DIRECTO/enviar.jpg",
+				"/images/manuals/COSTO_DIRECTO/lista.jpg",
+			],
+			imageAlt: "Finalización del registro",
+			reversed: true,
+		},
+	],
+};
 ---
 
 <Layout title="Plataforma de Manuales">
@@ -608,6 +741,7 @@ const ordenCompraManual = {
 				ticketManual,
 				requerimientoManual,
 				ordenCompraManual,
+				costoDirectoManual,
 			]}
 		/>
 	</main>

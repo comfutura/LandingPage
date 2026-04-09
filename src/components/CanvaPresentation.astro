@@ -608,6 +608,10 @@ const { manuals } = Astro.props;
 		});
 	}
 
+	// Always start with the visually first tab
+	const firstTab = switcher.querySelector('.manual-tab');
+	const startIdx = firstTab ? parseInt(firstTab.dataset.manualIndex) : 0;
+
 	stages.forEach((stage, sIdx) => {
 		stage.querySelector('.canva-next').onclick = () => updateSlide(currentIdx + 1);
 		stage.querySelector('.canva-prev').onclick = () => updateSlide(currentIdx - 1);
@@ -654,5 +658,5 @@ const { manuals } = Astro.props;
 	});
 
 	// Initialize
-	setManual(0);
+	setManual(startIdx);
 </script>
