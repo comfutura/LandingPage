@@ -508,8 +508,8 @@ const requerimientoManual = {
 	],
 };
 
-const ordenCompraManual = {
-	id: "orden-compra",
+const ordenCompraClienteManual = {
+	id: "orden-compra-cliente",
 	label: "Orden de Compra Cliente",
 	primaryColor: "#8b5cf6",
 	glowColor: "#8b5cf6",
@@ -594,6 +594,83 @@ const ordenCompraManual = {
 				"/images/manuals/ORDEN_COMPRA/final.jpg",
 			],
 			imageAlt: "Confirmación de registro",
+		},
+	],
+};
+
+const ordenCompraManual = {
+	id: "orden-compra",
+	label: "Órdenes de Compra",
+	primaryColor: "#f59e0b", // Amber/Gold
+	glowColor: "#f59e0b",
+	bgDark: "#1a1105",
+	icon: "fas fa-cart-shopping",
+	steps: [
+		{
+			id: "ocp0",
+			stepNumber: 0,
+			title: "Módulo de Órdenes de Compra",
+			description:
+				"Gestión y seguimiento de órdenes enviadas a proveedores.",
+			items: [
+				"Visualización centralizada de todas las OCs del proyecto.",
+				"Resumen dinámico de montos totales, pendientes y rechazados.",
+				"Seguimiento de entregas y compromiso de gasto.",
+			],
+			multipleImages: ["/images/manuals/ORD_COMP/cd.jpg"],
+			imageAlt: "Presentación Órdenes de Compra",
+		},
+		{
+			id: "ocp1",
+			stepNumber: 1,
+			title: "Creación Órdenes de Compra",
+			description: "Creación y llenado de formulario.",
+			items: [
+				"Nos dirigimos a nuestro dashboard y elegimos el módulo indicado (1).",
+				"Para cargar una nueva Orden de Compra del Cliente seleccionamos 'Nueva Orden'(2).",
+			],
+			multipleImages: ["/images/manuals/ORD_COMP/cd2.jpg"],
+			imageAlt: "Filtros de búsqueda",
+			reversed: true,
+		},
+		{
+			id: "ocp2",
+			stepNumber: 2,
+			title: "Completado de formulario",
+			description: "Conoce el correcto llenado del formulario de OC.",
+			items: [
+				"Seleccionamos OT para designar una OT que ya hemos creado en CD (1).",
+				"Seleccionamos Proveedor (2).",
+				"Detallamos forma de pago (3).",
+				"Detallamos descripción de material (4).",
+				"Detallamos cantidad y precio (5).",
+				"Adjuntamos Cotización (6).",
+				"Generamos la orden de compra (7).",
+			],
+			multipleImages: [
+				"/images/manuals/ORD_COMP/formoc.jpg",
+				"/images/manuals/ORD_COMP/form1.jpg",
+				"/images/manuals/ORD_COMP/formoc2.jpg",
+			],
+			imageAlt: "Estados OC",
+		},
+		{
+			id: "ocp3",
+			stepNumber: 3,
+			title: "Listado de Orden de Compra",
+			description: "Visualizar el estado de la orden de compra creada.",
+			items: [
+				"Una vez ya creado tenemos que liberar la orden de compra(1)",
+				"Liberamos la orden de compra.",
+				"Ya estando liberada, se muestra en el mismo listado pero cambiando de estado.",
+			],
+			multipleImages: [
+				"/images/manuals/ORD_COMP/listoc.jpg",
+				"/images/manuals/ORD_COMP/alertaoc.jpg",
+				"/images/manuals/ORD_COMP/oclista.jpg",
+			],
+			imageAlt: "Crear Nueva OC",
+			reversed: true,
 		},
 	],
 };
@@ -740,6 +817,7 @@ const costoDirectoManual = {
 				reservaManual,
 				ticketManual,
 				requerimientoManual,
+				ordenCompraClienteManual,
 				ordenCompraManual,
 				costoDirectoManual,
 			]}
